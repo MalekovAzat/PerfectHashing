@@ -1,3 +1,5 @@
+#ifndef UNIVERSALHASH_H
+#define UNIVERSALHASH_H
 
 class UniversalHash
 {
@@ -11,3 +13,4 @@ private:
     int b;
 };
 
+#endif // UNIVERSALHASH_H

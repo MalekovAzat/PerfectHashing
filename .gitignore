@@ -3,3 +3,5 @@
 **.cmake
 **/Makefile
 *main
+**Cache.txt
+**.vscode

@@ -1,5 +1,6 @@
 #include "DirectHashTable.h"
 #include <cstdlib>
+#define p 100000
 
 DirectHashTable::DirectHashTable(int size)
     : AbstractHashTable()
