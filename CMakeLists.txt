@@ -1,16 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
+project(hash_test_project)
 
-project(hash_tables_research)
+set(CMAKE_CXX_STANDARD 14)
 
-set(SOURCE_EXE main.cpp)
+#include_directories(src)
 
-set(SOURCE_LIB ./tools/UniversalHash.h)
-
-include_directories(tools hash_tables)
-
-add_executable(main main.cpp)
-
+#add_subdirectory(src)
+add_subdirectory(tst)
 add_subdirectory(tools)
+add_subdirectory(lib/googletest)
 add_subdirectory(hash_tables)
-
-target_link_libraries(main tools hash_tables)	

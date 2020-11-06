@@ -5,7 +5,7 @@ class UniversalHash
 {
 public:
     UniversalHash(int p, int m, int a, int b);
-    int operator()(int key);
+    int operator()(int key) const;
 private:
     int p;
     int m;

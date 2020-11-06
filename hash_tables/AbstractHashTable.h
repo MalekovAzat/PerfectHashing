@@ -2,8 +2,7 @@
 #define ABSTRACTHASHTABLE_H
 
 #include <string>
-
-class Node;
+#include "../tools/Node.h"
 
 class AbstractHashTable
 {
@@ -18,14 +17,6 @@ public:
     virtual int insert(int key, std::string value) = 0;
     virtual Node search(int key) = 0;
     virtual void del(std::string value) = 0;
-};
-
-// maybe not needed
-class Node
-{
-public:
-    int key;
-    std::string value;  
 };
 
 #endif // ABSTRACTHASHTABLE_H

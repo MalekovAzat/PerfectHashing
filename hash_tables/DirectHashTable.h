@@ -1,8 +1,9 @@
+#ifndef DIRECTHASHTABLE_H
+#define DIRECTHASHTABLE_H
+
 #include <iostream>
 #include "AbstractHashTable.h"
 #include "../tools/UniversalHash.h"
-
-class Node;
 
 class DirectHashTable: public AbstractHashTable
 {
@@ -31,10 +32,17 @@ public:
      * The method searchs sert the key to table
      */
     virtual void del(std::string value);
+    
+    /* 
+     * The method returns the Node by index
+     */
+    Node get(int index);
 
+    int getHashValue(int key, int offset) const;
+    
 private:
 
-    int calc_hash(int key, int offset);
+    int calc_hash(int key, int offset) const;
 
     int internal_hash(int key);
 
@@ -45,3 +53,5 @@ private:
     Node** storage;
     UniversalHash hashFunction;
 };
+
+#endif // !DIRECTHASHTABLE_H
