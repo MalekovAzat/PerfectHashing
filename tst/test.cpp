@@ -71,7 +71,7 @@ TEST(DirectTable_test, insertToEqualsPos) {
 
 TEST(DirectTable_test, insertToEqualAfterInser) {
     DirectHashTable table(1000);
-    // srand(time(NULL));
+    srand(time(NULL));
     table.insert(100, "Hell");
     EXPECT_EQ(table.insert(100, "HELL"), table.getHashValue(100, 1));
 }
@@ -121,4 +121,37 @@ TEST(DirectTable_test, checkAllTableValue) {
     }
     
     EXPECT_EQ(mySet.size(), 0);
+}
+
+TEST(DirectTable_test, cannotDeleteEmpty) {
+    int table_size = 1000;
+    DirectHashTable table(table_size);
+
+    EXPECT_EQ(table.del("Сan't find me"), NodeStates::NOT_FOUNDED);
+    table.insert(100, "Сan find me");
+    EXPECT_EQ(table.search(100), Node(100, "Сan find me"));
+}
+
+TEST(DirectTable_test, rightDelete) {
+    int table_size = 1000;
+    DirectHashTable table(table_size);
+
+    for (int i = 0; i < table_size; i++)
+    {
+        table.insert(100, "HELLLAA");
+    }
+
+    for (int i = 0; i < table_size; i++)
+    {
+        EXPECT_NE(table.del("HELLLAA"), NodeStates::NOT_FOUNDED);
+    }
+}
+
+TEST(DirectTable_test, insetToTheSameValue) {
+    int table_size = 1000;
+    DirectHashTable table(table_size);
+
+    int insetedPos = table.insert(100,"Helll");
+    table.del("Helll");
+    EXPECT_EQ(table.insert(100,"Helll"), insetedPos);
 }

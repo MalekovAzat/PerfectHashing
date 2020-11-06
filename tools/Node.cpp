@@ -1,5 +1,11 @@
 #include "Node.h"
 
+Node::Node(const Node& node)
+    : key(node.key)
+    , value(node.value)
+{
+}
+
 Node::Node(int key, std::string value)
     : key(key)
     , value(value)

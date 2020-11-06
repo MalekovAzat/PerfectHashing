@@ -16,7 +16,7 @@ public:
 
     virtual int insert(int key, std::string value) = 0;
     virtual Node search(int key) = 0;
-    virtual void del(std::string value) = 0;
+    virtual int del(std::string value) = 0;
 };
 
 #endif // ABSTRACTHASHTABLE_H

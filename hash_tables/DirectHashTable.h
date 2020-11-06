@@ -31,7 +31,7 @@ public:
     /* 
      * The method searchs sert the key to table
      */
-    virtual void del(std::string value);
+    virtual int del(std::string value);
     
     /* 
      * The method returns the Node by index

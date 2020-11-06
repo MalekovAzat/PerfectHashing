@@ -16,7 +16,10 @@ class Node
 public:
     // Node();
     Node(int key = NOT_SETTED, std::string value = "");
-
+    
+    //copyconstructor
+    Node(const Node&);
+    
     friend bool operator==(const Node& left, const Node& right);
     friend bool operator!=(const Node& left, const Node& right);
     int key;

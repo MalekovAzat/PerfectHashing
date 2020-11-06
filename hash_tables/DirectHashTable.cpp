@@ -5,8 +5,8 @@
 DirectHashTable::DirectHashTable(int size)
     : AbstractHashTable()
     , size(size)
-    , c1(rand())
-    , c2(rand())
+    , c1(1)
+    , c2(0)
     , hashFunction(p, size, (rand() % (p-1) + 1), rand() % p)
 {
     storage = new Node*[size];
@@ -39,8 +39,8 @@ Node DirectHashTable::search(int key)
     {
         int hashValue = calc_hash(key, i);
         
-        if (storage[hashValue]->key == -1)
-            break;
+        if (storage[hashValue]->key == NodeStates::NOT_SETTED)
+            return Node(NodeStates::NOT_FOUNDED);
 
         if (storage[hashValue]->key == key)
         {
@@ -49,7 +49,7 @@ Node DirectHashTable::search(int key)
     }
 }
 
-void DirectHashTable::del(std::string value)
+int DirectHashTable::del(std::string value)
 {
     for (int i = 0; i < size; i++)
     {
@@ -58,8 +58,11 @@ void DirectHashTable::del(std::string value)
             storage[i]->value = "";
             // as deleted key
             storage[i]->key = NodeStates::DELETED;
+            //return deletedIndex
+            return i;
         }
     }
+    return NodeStates::NOT_FOUNDED;
 }
 
 int DirectHashTable::calc_hash(int key, int offset) const
