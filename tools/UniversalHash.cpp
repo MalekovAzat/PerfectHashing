@@ -10,5 +10,5 @@ UniversalHash::UniversalHash(int p, int m, int a, int b)
 
 int UniversalHash::operator()(int key) const
 {
-    return ( (a * key + b) % p) % m;    
+    return ((unsigned long long int)(a * key + b) % p) % m;    
 }

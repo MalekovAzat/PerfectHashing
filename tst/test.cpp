@@ -1,10 +1,12 @@
 #include "../lib/googletest/googletest/include/gtest/gtest.h"
 #include "../tools/UniversalHash.h"
 #include "../hash_tables/DirectHashTable.h"
+#include "../hash_tables/PerfectHashTable.h"
 
 #include <cstdlib>
 #include <time.h>
 #include <set>
+#include <vector>
 
 TEST(UniversalHash_Test, equealValueForSameKey) {
     int p = 10000;
@@ -154,4 +156,84 @@ TEST(DirectTable_test, insetToTheSameValue) {
     int insetedPos = table.insert(100,"Helll");
     table.del("Helll");
     EXPECT_EQ(table.insert(100,"Helll"), insetedPos);
+}
+
+TEST(InternalHashTable_test, insertAndReturnAreSame)
+{
+    int table_size = 1000;
+    InternalHashTable internalTable(1000);
+    
+    internalTable.insert(123, "11");
+
+    EXPECT_EQ(internalTable.search(123), Node(123, "11"));
+}
+
+TEST(InternalHashTable_test, DeleteRightNode)
+{
+    int table_size = 1000;
+    InternalHashTable internalTable(1000);
+
+    internalTable.insert(123, "11");
+    int index = internalTable.del("11");
+    
+    EXPECT_EQ(NodeStates::DELETED, internalTable.search(123).key);
+}
+
+TEST(InternalHashTable_test, DontInsertTheSame)
+{
+    int table_size = 1000;
+    InternalHashTable internalTable(1000);
+
+    internalTable.insert(123, "11");
+
+    EXPECT_EQ(internalTable.insert(123, "11"), NodeStates::NOT_INSERTED);
+}
+
+TEST(PerfectHashTable_test, SearchRightValue)
+{
+    // гегеним 10000 неповторящихся ключей
+    int table_size = 10000;
+    int maxKeyValue = 100000;
+    std::vector<int> randKeys(maxKeyValue);
+    std::vector<int> keyForTest(table_size);
+    std::vector<std::string> randStrings(maxKeyValue);
+    //needForGenerate
+    std::string allow_symbols("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+
+    for (int i = 0; i < maxKeyValue; i++)
+    {
+        randKeys[i] = i;
+        int strSize = rand() % 6 + 1;
+        for (int j = 0; j < strSize; j++)
+        {
+            randStrings[i] += allow_symbols[rand() % 62];
+        }
+    }
+
+    std::random_shuffle(randKeys.begin(), randKeys.end());
+    for (int i =0; i < table_size; i++)
+    {
+        keyForTest[i] = randKeys[i];
+    }
+    std::cout<< "HELLO" <<std::endl;
+    Node** nodeArray = new Node*[table_size];
+
+    for (int i = 0; i < table_size; i++)
+    {
+        nodeArray[i] = new Node(keyForTest[i], randStrings[i]);
+    }
+
+    PerfectHashTable perfectTable(10000);
+    perfectTable.preprocessing(table_size, nodeArray);
+    
+    // любые цифры можно сюда поставить
+    EXPECT_EQ(perfectTable.search(keyForTest[100]), Node(keyForTest[100], randStrings[100]));
+    EXPECT_EQ(perfectTable.search(keyForTest[123]), Node(keyForTest[123], randStrings[123]));
+    
+    for (int i = 0; i < maxKeyValue; i++)
+    {
+        delete nodeArray[i];
+    }
+
+    delete [] nodeArray;
 }

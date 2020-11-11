@@ -14,17 +14,19 @@ public:
      */
     InternalHashTable(int size);
 
+    InternalHashTable(int size, UniversalHash* hashFunctionLvl2);
+
     virtual int insert(int key, std::string value);
 
     virtual Node search(int key);
 
     virtual int del(std::string value);
 
-    ~InternalHashTable(){};
+    ~InternalHashTable();
 private:
     int size;
     Node** storage;
-    UniversalHash hashFunction;
+    UniversalHash* hashFunction;
 };
 
 
@@ -40,16 +42,20 @@ public:
     /*
      * The function inserts key and his value to the table.
      */
-    virtual int insert(int key, std::string value);
+    int insert(int key, std::string value);
 
-    virtual Node search(int key);
+    Node search(int key);
 
-    virtual int del(std::string value);
+    int del(std::string value);
+
+    void preprocessing(int size, Node** nodes);
 
     ~PerfectHashTable(){};
 
 private:
     int size;
+    
+    UniversalHash hashFunctionLvl1;
     InternalHashTable** storage;
 };
 
