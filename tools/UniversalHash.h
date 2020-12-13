@@ -1,16 +1,22 @@
 #ifndef UNIVERSALHASH_H
 #define UNIVERSALHASH_H
 
+#include <iostream>
+
+#include "UniformDistributionGenerator.h"
+#include "defines.h"
+
 class UniversalHash
 {
 public:
-    UniversalHash(int p, int m, int a, int b);
-    int operator()(int key) const;
+    UniversalHash(int m, int p = MAX_KEY_VALUE);
+    int operator()(uint key) const;
+    void updateParameters();
 private:
-    int p;
     int m;
-    int a;
-    int b;
+    unsigned long long p;
+    unsigned long long a;
+    unsigned long long b;
 };
 
 #endif // UNIVERSALHASH_H

@@ -1,90 +1,24 @@
 #include "PerfectHashTable.h"
-#define p 100000
 
-InternalHashTable::InternalHashTable(int size)
-    :AbstractHashTable()
-    , size(size)
-    , hashFunction(new UniversalHash(p, size, (rand() % (p - 1) + 1), rand() % p))
-{
-    storage = new Node *[size];
-    for (int i = 0; i < size; i++)
-    {
-        storage[i] = new Node();
-    }
-}
+#include "../tools/UniformDistributionGenerator.h"
 
-InternalHashTable::InternalHashTable(int size, UniversalHash *hashFunctionLvl2)
-    : size(size)
-{
-    hashFunction = hashFunctionLvl2;
-    storage = new Node *[size];
-    for (int i = 0; i < size; i++)
-    {
-        storage[i] = new Node();
-    }
-}
+//  (rand() % (maxKeyValue - 1) + 1), rand() % maxKeyValue) - вставь как 3 и 4 параметр в UniversalHash
 
-int InternalHashTable::insert(int key, std::string value)
-{
-    int hashValue = (*hashFunction)(key);
-
-    if (storage[hashValue]->key == NodeStates::NOT_SETTED)
-    {
-        storage[hashValue]->key = key;
-        storage[hashValue]->value = value;
-        return hashValue;
-    }
-
-    return NodeStates::NOT_INSERTED;
-}
-
-Node InternalHashTable::search(int key)
-{
-    int hashValue = (*hashFunction)(key);
-    return *storage[hashValue];
-}
-
-// Линейный перебор, очень очень плохо!
-int InternalHashTable::del(std::string value)
-{
-    for (int i = 0; i < size; i++)
-    {
-        if (storage[i]->value == value)
-        {
-            storage[i]->key = NodeStates::DELETED;
-            storage[i]->value = "";
-            return i;
-        }
-    }
-
-    return NodeStates::NOT_FOUNDED;
-}
-
-InternalHashTable::~InternalHashTable()
-{
-    for (int i = 0; i < size; i++)
-    {
-        delete storage[i];
-    }
-    delete[] storage;
-}
-
-PerfectHashTable::PerfectHashTable(int size)
-    : size(size)
-    , hashFunctionLvl1(p, size, (rand() % (p - 1) + 1), rand() % p)
+PerfectHashTable::PerfectHashTable(int size, int maxKeyValue)
+    : maxKeyValue(maxKeyValue), size(size), hashFunctionLvl1(size)
 {
     // надо придумать ленивую инициализацию
     // знаем сколько ключе будем вставлять -> нужно создать таблицу такого размера
     // далее считаем кол-во коллизий, и если оно больше чем квадрат от кол-ва то пересобираем таблицу
-    storage = new InternalHashTable *[size];
+    lvl2HashTables = new SquareSizeTable *[size];
 }
 
 int PerfectHashTable::insert(int key, std::string value)
 {
     int lvl1Hash = hashFunctionLvl1(key);
-    if (storage[lvl1Hash] != nullptr)
+    if (lvl2HashTables[lvl1Hash] != nullptr)
     {
-        return storage[lvl1Hash]->insert(key, value);
+        return lvl2HashTables[lvl1Hash]->insert(key, value);
     }
 
     return NodeStates::NOT_INSERTED;
@@ -94,9 +28,9 @@ Node PerfectHashTable::search(int key)
 {
     int lvl1Hash = hashFunctionLvl1(key);
 
-    if (storage[lvl1Hash] != nullptr)
+    if (lvl2HashTables[lvl1Hash] != nullptr)
     {
-        return storage[lvl1Hash]->search(key);
+        return lvl2HashTables[lvl1Hash]->search(key);
     }
     return Node(NodeStates::NOT_FOUNDED);
 }
@@ -108,55 +42,94 @@ int del(std::string value)
     return NodeStates::NOT_FOUNDED;
 }
 
-void PerfectHashTable::preprocessing(int size, Node **nodes)
+int PerfectHashTable::preprocessing(int size, Node **nodes, int compression)
 {
     int *countInSubTables = new int[size];
+
     int squadSum = 0;
-    // TODO: дописать чтобы работало в цикле
-    while (true)
+    bool rightSize = false;
+
+    while (!rightSize)
     {
         squadSum = 0;
+        hashFunctionLvl1 = UniversalHash(size);
+
         for (int i = 0; i < size; i++)
         {
             countInSubTables[i] = 0;
         }
 
+        // считаем размеры для вторичных таблицы
         for (int i = 0; i < size; i++)
         {
             int hashValue = hashFunctionLvl1(nodes[i]->key);
             countInSubTables[hashValue]++;
         }
 
-        // высчитаем общее число коллизий
         for (int i = 0; i < size; i++)
         {
-            // std::cout << countInSubTables[i] << std::endl;
-            squadSum += (countInSubTables[i] * countInSubTables[i]);
+            squadSum += countInSubTables[i] * countInSubTables[i];
         }
+        rightSize = (squadSum < compression * size);
+    }
 
-        if (squadSum < 4 * size)
+    for (int i = 0; i < size; i++)
+    {
+        int subtableSize = countInSubTables[i] * countInSubTables[i];
+        // std::cout<< "For !@#" << i <<" size is: "<< subtableSize<<std::endl;
+        lvl2HashTables[i] = new SquareSizeTable(subtableSize);
+    }
+
+    for (int i = 0; i < size; i++)
+    {
+        int lvl1Key = hashFunctionLvl1(nodes[i]->key);
+        lvl2HashTables[lvl1Key]->insert(nodes[i]->key, nodes[i]->value);
+    }
+    return squadSum;
+}
+
+int PerfectHashTable::preprocessing(std::vector<unsigned int> keys, int compression)
+{
+    int *countInSubTables = new int[size];
+
+    int squadSum = 0;
+    bool rightSize = false;
+
+    while (!rightSize)
+    {
+        squadSum = 0;
+        hashFunctionLvl1 = UniversalHash(size);
+
+        for (int i = 0; i < size; i++)
         {
-            break;
+            countInSubTables[i] = 0;
         }
 
-        hashFunctionLvl1 = UniversalHash(p, size, (rand() % (p - 1) + 1), rand() % p);
+        // считаем размеры для вторичных таблицы
+        for(uint key : keys)
+        {   
+            int hashValue = hashFunctionLvl1(key);
+            countInSubTables[hashValue]++;
+        }
+
+        for (int i = 0; i < size; i++)
+        {
+            squadSum += countInSubTables[i] * countInSubTables[i];
+        }
+    
+        rightSize = (squadSum < compression * size);
     }
 
-    std::cout << "The size is " <<  " " << squadSum << " " <<4 * size<< std::endl;
-    // подобралась функция, 
-    // при которой будет достигаться размер 4*n кол-во элементов
-    // выделим память для всех элементов
-    
     for (int i = 0; i < size; i++)
     {
-        int subtableSize = countInSubTables[i];
-        storage[i] = new InternalHashTable(subtableSize);
+        int subtableSize = countInSubTables[i] * countInSubTables[i];
+        lvl2HashTables[i] = new SquareSizeTable(subtableSize);
     }
-    // на данном уровне у нас есть очень большая вероятность того что коллизий не будет,
-    //  но так писать очень плохо потому что по сути тут время будет 2 * O(n)
-    for (int i = 0; i < size; i++)
+
+    for(uint key: keys)
     {
-        int lvl1hashValue = hashFunctionLvl1(nodes[i]->key);
-        storage[lvl1hashValue]->insert(nodes[i]->key, nodes[i]->value);
+        int lvl1Key = hashFunctionLvl1(key);
+        lvl2HashTables[lvl1Key]->insert(key, "EmptyString");
     }
+    return squadSum;
 }

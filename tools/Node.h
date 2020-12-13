@@ -5,24 +5,25 @@
 
 enum NodeStates
 {
-    NOT_FOUNDED = -4,
-    DELETED = -3,
-    NOT_SETTED = -2,
-    NOT_INSERTED = -1,
+    NOT_FOUNDED = -5,
+    DELETED = -4,
+    NOT_SETTED = -3,
+    NOT_INSERTED = -2,
+    ALREADY_INSERTED = -1,
 };
 
 class Node
 {
 public:
     // Node();
-    Node(int key = NOT_SETTED, std::string value = "");
+    Node(unsigned int key = NOT_SETTED, std::string value = "");
     
     //copyconstructor
-    Node(const Node&);
+    Node(const Node&);  
     
     friend bool operator==(const Node& left, const Node& right);
     friend bool operator!=(const Node& left, const Node& right);
-    int key;
+    unsigned int key;
     std::string value;  
 };
 

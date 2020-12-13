@@ -6,7 +6,7 @@ Node::Node(const Node& node)
 {
 }
 
-Node::Node(int key, std::string value)
+Node::Node(unsigned int key, std::string value)
     : key(key)
     , value(value)
 {

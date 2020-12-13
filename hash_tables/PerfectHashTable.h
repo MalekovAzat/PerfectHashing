@@ -2,33 +2,10 @@
 #define PERFECTHASHTABLE_H
 
 #include <iostream>
-#include "AbstractHashTable.h"
-#include "../tools/UniversalHash.h"
-
-class InternalHashTable: public AbstractHashTable
-{
-public:
-    /*
-     * Constructor for hash table
-     * size of level2 (internal)  table
-     */
-    InternalHashTable(int size);
-
-    InternalHashTable(int size, UniversalHash* hashFunctionLvl2);
-
-    virtual int insert(int key, std::string value);
-
-    virtual Node search(int key);
-
-    virtual int del(std::string value);
-
-    ~InternalHashTable();
-private:
-    int size;
-    Node** storage;
-    UniversalHash* hashFunction;
-};
-
+#include <limits>
+#include <random>
+#include <list>
+#include "SquareSizeTable.h"
 
 class PerfectHashTable /* : public AbstractHashTable */
 {
@@ -37,7 +14,7 @@ public:
      * Constructor for hash table
      * size of level1 (external) table
      */
-    PerfectHashTable(int size);
+    PerfectHashTable(int size, int maxKeyValue = MAX_KEY_VALUE);
 
     /*
      * The function inserts key and his value to the table.
@@ -48,15 +25,16 @@ public:
 
     int del(std::string value);
 
-    void preprocessing(int size, Node** nodes);
+    int preprocessing(int size, Node** nodes, int compression = 4);
+    int preprocessing(std::vector<unsigned int> keys, int compression);
 
     ~PerfectHashTable(){};
 
 private:
+    int maxKeyValue;
     int size;
-    
     UniversalHash hashFunctionLvl1;
-    InternalHashTable** storage;
+    SquareSizeTable** lvl2HashTables;
 };
 
 
