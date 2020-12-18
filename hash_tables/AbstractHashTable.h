@@ -14,8 +14,8 @@ public:
     // AbstractHashTable &operator=(const AbstractHashTable &) = default;
     ~AbstractHashTable(){};
 
-    virtual int insert(int key, std::string value) = 0;
-    virtual Node search(int key) = 0;
+    virtual int insert(unsigned int key, std::string value) = 0;
+    virtual Node search(unsigned int key) = 0;
     virtual int del(std::string value) = 0;
 };
 
