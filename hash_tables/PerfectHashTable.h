@@ -19,7 +19,6 @@ public:
     int del(std::string value);
 
     int preprocessing(int size, Node** nodes, int compression = 4);
-
     int preprocessing(std::vector<unsigned int> keys, int compression);
 
     ~PerfectHashTable(){};
