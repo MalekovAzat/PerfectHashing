@@ -2,7 +2,7 @@
 #define DEFINES_H
 #include <limits>
 
-#define MAX_KEY_VALUE UINT_MAX
+#define MAX_KEY_VALUE INT_MAX
 class UniformDistributionGenerator;
 typedef UniformDistributionGenerator Generator;
 

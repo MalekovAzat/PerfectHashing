@@ -1,21 +1,10 @@
 #include "PerfectHashTable.h"
 
 #include "../tools/UniformDistributionGenerator.h"
-<<<<<<< HEAD
-=======
-
-//  (rand() % (maxKeyValue - 1) + 1), rand() % maxKeyValue) - вставь как 3 и 4 параметр в UniversalHash
->>>>>>> 9e0db3a28f74b9fa3cdb3d1d4f470bb6c5c511fb
 
 PerfectHashTable::PerfectHashTable(int size, int maxKeyValue)
     : maxKeyValue(maxKeyValue), size(size), hashFunctionLvl1(size)
 {
-<<<<<<< HEAD
-=======
-    // надо придумать ленивую инициализацию
-    // знаем сколько ключе будем вставлять -> нужно создать таблицу такого размера
-    // далее считаем кол-во коллизий, и если оно больше чем квадрат от кол-ва то пересобираем таблицу
->>>>>>> 9e0db3a28f74b9fa3cdb3d1d4f470bb6c5c511fb
     lvl2HashTables = new SquareSizeTable *[size];
 }
 
@@ -111,8 +100,8 @@ int PerfectHashTable::preprocessing(std::vector<unsigned int> keys, int compress
             countInSubTables[i] = 0;
         }
 
-        for(uint key : keys)
-        {   
+        for (uint key : keys)
+        {
             int hashValue = hashFunctionLvl1(key);
             countInSubTables[hashValue]++;
         }
@@ -121,7 +110,7 @@ int PerfectHashTable::preprocessing(std::vector<unsigned int> keys, int compress
         {
             squadSum += countInSubTables[i] * countInSubTables[i];
         }
-    
+
         rightSize = (squadSum < compression * size);
     }
 
@@ -131,7 +120,7 @@ int PerfectHashTable::preprocessing(std::vector<unsigned int> keys, int compress
         lvl2HashTables[i] = new SquareSizeTable(subtableSize);
     }
 
-    for(uint key: keys)
+    for (uint key : keys)
     {
         int lvl1Key = hashFunctionLvl1(key);
         lvl2HashTables[lvl1Key]->insert(key, "EmptyString");

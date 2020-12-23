@@ -1,9 +1,11 @@
 import matplotlib.pyplot as plt
 
+
 def main():
     exp1()
     exp2()
     exp3()
+
 
 def exp1():
     fileName = 'build/exp1.txt'
@@ -30,6 +32,7 @@ def exp1():
     plt.ylabel("Subtables size ")
     fig.savefig('PreprSize.png')
 
+
 def exp2():
     fileName = 'build/exp2.txt'
     f = open(fileName)
@@ -46,15 +49,17 @@ def exp2():
     fig, ax = plt.subplots()
     ax.plot(sizeOfTables, preprTimePerf, label="PerfectHashT")
     ax.plot(sizeOfTables, preprTimeSquare, label="SquareHashT")
-    plt.title("Dependency between count of inserting elements and preprocessing time")
+    plt.title(
+        "Dependency between count of inserting elements and preprocessing time")
     plt.xlabel("Inserting elements")
     plt.ylabel("Preprcessing time microseconds")
     plt.legend()
     fig.savefig('PreprocessingDifference.png')
 
+
 def exp3():
     fileName = 'build/exp3.txt'
-    
+
     f = open(fileName)
     sizeOfTables = []
     searchTimePerf = []
@@ -67,7 +72,8 @@ def exp3():
         searchTimeSquare.append(int(line[2]))
 
     fig, ax = plt.subplots()
-    plt.title("Dependency between count of searching elements and preprocessing time")
+    plt.title(
+        "Dependency between count of searching elements and preprocessing time")
     ax.plot(sizeOfTables, searchTimePerf, label="PerfectHashT")
     ax.plot(sizeOfTables, searchTimeSquare, label="SquareHashT")
     plt.xlabel("searching elements")

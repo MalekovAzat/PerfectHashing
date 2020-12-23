@@ -3,14 +3,10 @@
 #define p 100000
 
 OpenHashTable::OpenHashTable(int size, int c1, int c2)
-    : AbstractHashTable()
-    , size(size)
-    , c1(c1)
-    , c2(c2)
-    , hashFunction(size)
+    : AbstractHashTable(), size(size), c1(c1), c2(c2), hashFunction(size)
 {
-    storage = new Node*[size];
-    for(int i = 0; i < size; i++)
+    storage = new Node *[size];
+    for (int i = 0; i < size; i++)
     {
         storage[i] = new Node();
     }
@@ -21,8 +17,7 @@ int OpenHashTable::insert(unsigned int key, std::string value)
     for (int i = 0; i < size; i++)
     {
         int hashValue = calc_hash(key, i);
-        if (storage[hashValue]->key == NodeStates::NOT_SETTED 
-            || storage[hashValue]->key == NodeStates::DELETED)
+        if (storage[hashValue]->key == NodeStates::NOT_SETTED || storage[hashValue]->key == NodeStates::DELETED)
         {
             storage[hashValue]->key = key;
             storage[hashValue]->value = value;
@@ -31,15 +26,15 @@ int OpenHashTable::insert(unsigned int key, std::string value)
         }
     }
 
-    return NodeStates::NOT_INSERTED;    
-}   
+    return NodeStates::NOT_INSERTED;
+}
 
 Node OpenHashTable::search(unsigned int key)
 {
-    for(int i = 0; i < size; i++)
+    for (int i = 0; i < size; i++)
     {
         int hashValue = calc_hash(key, i);
-        
+
         if (storage[hashValue]->key == NodeStates::NOT_SETTED)
             return Node(NodeStates::NOT_FOUNDED);
 

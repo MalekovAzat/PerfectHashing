@@ -4,12 +4,12 @@
 #include "AbstractHashTable.h"
 #include "../tools/UniversalHash.h"
 
-class SquareSizeTable: public AbstractHashTable
+class SquareSizeTable : public AbstractHashTable
 {
 public:
     SquareSizeTable(int size, int maxKeyValue = MAX_KEY_VALUE);
 
-    SquareSizeTable(int size, UniversalHash* hashFunctionLvl2);
+    SquareSizeTable(int size, UniversalHash *hashFunctionLvl2);
 
     virtual int insert(unsigned int key, std::string value) override;
 
@@ -20,7 +20,7 @@ public:
     ~SquareSizeTable();
 
 private:
-    Node** saveNodes();
+    Node **saveNodes();
     void updateHashFunction();
     void clearStorage();
     int fixCollision(int key, std::string value);
@@ -28,8 +28,8 @@ private:
 private:
     int size;
     int maxKeyValue;
-    Node** storage;
-    UniversalHash* hashFunction;
+    Node **storage;
+    UniversalHash *hashFunction;
 };
 
 #endif // !SQUARESIZETABLE_H

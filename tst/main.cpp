@@ -2,7 +2,8 @@
 #include "../lib/googletest/googletest/include/gtest/gtest.h"
 #include "../tools/UniformDistributionGenerator.h"
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
     ::testing::InitGoogleTest(&argc, argv);
 
     // init random generator

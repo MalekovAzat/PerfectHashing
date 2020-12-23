@@ -119,7 +119,7 @@ int SquareSizeTable::fixCollision(int key, std::string value)
 
 Node SquareSizeTable::search(unsigned int key)
 {
-    int hashValue = hashFunction->operator()(key);
+    uint hashValue = hashFunction->operator()(key);
     return *storage[hashValue];
 }
 

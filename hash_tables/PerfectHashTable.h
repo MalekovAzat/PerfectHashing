@@ -18,7 +18,7 @@ public:
 
     int del(std::string value);
 
-    int preprocessing(int size, Node** nodes, int compression = 4);
+    int preprocessing(int size, Node **nodes, int compression = 4);
     int preprocessing(std::vector<unsigned int> keys, int compression);
 
     ~PerfectHashTable(){};
@@ -27,9 +27,7 @@ private:
     int maxKeyValue;
     int size;
     UniversalHash hashFunctionLvl1;
-    SquareSizeTable** lvl2HashTables;
+    SquareSizeTable **lvl2HashTables;
 };
 
-
-
-#endif // !PERFECTHASHTABLE 
+#endif // !PERFECTHASHTABLE

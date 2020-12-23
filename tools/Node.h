@@ -15,17 +15,16 @@ enum NodeStates
 class Node
 {
 public:
-    // Node();
     Node(unsigned int key = NOT_SETTED, std::string value = "");
-    
+
     //copy constructor
-    Node(const Node&);  
-    
-    friend bool operator==(const Node& left, const Node& right);
-    friend bool operator!=(const Node& left, const Node& right);
-    
+    Node(const Node &);
+
+    friend bool operator==(const Node &left, const Node &right);
+    friend bool operator!=(const Node &left, const Node &right);
+
     unsigned int key;
-    std::string value;  
+    std::string value;
 };
 
 #endif // !NODE_H

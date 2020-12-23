@@ -5,7 +5,7 @@
 #include "AbstractHashTable.h"
 #include "../tools/UniversalHash.h"
 
-class OpenHashTable: public AbstractHashTable
+class OpenHashTable : public AbstractHashTable
 {
 public:
     /* 
@@ -13,8 +13,9 @@ public:
      */
     OpenHashTable(int size, int c1 = 1, int c2 = 0);
 
-    inline ~OpenHashTable(){
-        delete [] storage;
+    inline ~OpenHashTable()
+    {
+        delete[] storage;
     };
 
     /* 
@@ -31,16 +32,15 @@ public:
      * The method searchs sert the key to table
      */
     virtual int del(std::string value);
-    
+
     /* 
      * The method returns the Node by index
      */
     Node get(int index);
 
     int getHashValue(int key, int offset) const;
-    
-private:
 
+private:
     int calc_hash(int key, int offset) const;
 
     int internal_hash(int key);
@@ -49,7 +49,7 @@ private:
     int size;
     unsigned int c1;
     unsigned int c2;
-    Node** storage;
+    Node **storage;
     UniversalHash hashFunction;
 };
 

@@ -1,10 +1,7 @@
 #include "UniversalHash.h"
 
 UniversalHash::UniversalHash(int m, int p)
-    : m(m)
-    , p(MAX_KEY_VALUE)
-    , a(Generator::getInstance().getA())
-    , b(Generator::getInstance().getB())
+    : m(m), p(MAX_KEY_VALUE), a(Generator::getInstance().getA()), b(Generator::getInstance().getB())
 {
 }
 
